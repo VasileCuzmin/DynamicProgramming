@@ -1,0 +1,36 @@
+
+https://www.youtube.com/watch?v=qxWu-SeAqe4
+
+The 0/1 Knapsack Problem is the absolute holy grail for understanding Dynamic Programming states and transitions.Here is the setup: Imagine you are a thief who breaks into a museum. You have a knapsack (backpack) that can hold a maximum weight of $W$ pounds. There are $n$ items in the museum, and every item has a specific weight and a specific value.The catch is the "0/1" part: you cannot break an item in half. You either take the whole item (1) or you leave it behind (0).
+Your goal: Maximize the total value in your knapsack without going over the weight limit.Let's break this down using the DP framework.
+
+1. Does it pass the DP Golden Rules?
+- Optimal Substructure: Yes. If you know the absolute best way to pack a 10-pound bag, you can use that knowledge to figure out the best way to pack a 15-pound bag when a new 5-pound item is introduced.
+
+- Overlapping Subproblems: Yes. If you recursively try every combination of "take it or leave it," you will repeatedly ask questions like, "What is the best way to pack 5 pounds using the remaining items?" multiple times.
+
+2. Defining the DP State
+
+Remember, the state is how we "freeze time." To completely describe your situation at any given moment in the museum, you need to know exactly two things:
+
+- Which item are you currently looking at? Let's call this index $i$.
+- How much weight capacity is currently left in your bag? Let's call this $w$.
+
+Because we need two variables to describe our state, our DP cache will be a 2D array (a grid or table).
+We define our state $dp[i][w]$ as: The maximum value you can achieve using only the first $i$ items, given a strict weight limit of $w$.
+
+3. The DP Transition Equation
+
+This is where the magic happens. You are standing in front of item $i$. It has a weight of $w_i$ and a value of $v_i$.
+
+You only have two possible choices:
+
+- Choice A: You leave it behind.
+If you don't take the item, your total value doesn't change, and your bag's available weight doesn't change. You just move on to the next item. The Math: $dp[i-1][w]$
+
+- Choice B: You take it (if it fits).
+
+If you put the item in your bag, you immediately gain its value ($v_i$). But, you also lose some of your bag's capacity ($w_i$). The total value is the value of this new item, plus the maximum value you could have achieved with whatever weight capacity is leftover. The Math: $v_i + dp[i-1][w - w_i]$
+
+
+Because your goal is to be the smartest thief possible, your transition equation simply takes the maximum of those two choices!$$dp[i][w] = \max(dp[i-1][w], \quad v_i + dp[i-1][w - w_i])$$(Note: If the item is heavier than your current capacity $w$, Choice B is impossible, so you are forced to take Choice A).By calculating this equation from the smallest weights and the first item, building your way up to the total items $n$ and the total weight limit $W$, the final answer will be sitting perfectly at the end of your 2D table in $dp[n][W]$.
